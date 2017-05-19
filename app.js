@@ -4,18 +4,25 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var session = require('express-session');
 
-
+// var passport = require('passport'); 
+// var LocalStrategy = require('passport-local').Strategy; 
+// var flash = require('connect-flash'); 
+var session = require('express-session'); 
+// require('./auth/passport.js')(passport); 
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+
 var rooms = require('./routes/rooms');
 var userprofile = require('./routes/userprofile');
 var register = require('./routes/register');
-var messages = require('./routes/messages');
 var rounds = require('./routes/rounds');
 var auth = require('./routes/auth');
+var login = require('./routes/login');
+var lobby = require('./routes/lobby');
+var game = require('./routes/game');
+var messages = require('./routes/messages');
 
 
 var app = express();
@@ -34,15 +41,29 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({secret: "Secret Key!", cookie: {secure: false}}));
-
+app.use(session({resave:true, saveUninitialized:true, secret: 'SECRET',cookie: { maxAge: 600000 }})); //todo check
 
 app.use('/', index);
+app.use('/api/login', login);
+app.use('/api/auth', auth);
+app.use('/api/register', register);
+
+app.use(function (req, res, next) {
+  if (!req.session.user_id) {
+      res.redirect('/api/login');
+    } else {
+      next();
+    }
+});
+
+app.use('/api/lobby', lobby);
+app.use('/api/game', game);
 app.use('/api/users', users);
 app.use('/api/rooms', rooms);
 app.use('/api/userprofile', userprofile);
-app.use('/api/register', register);
-app.use('/api/auth', auth);
+app.use('/api/rounds', rounds);
+app.use('/api/messages', messages);
+
 
 
 // catch 404 and forward to error handler
