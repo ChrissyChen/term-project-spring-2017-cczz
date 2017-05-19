@@ -23,6 +23,8 @@ var login = require('./routes/login');
 var lobby = require('./routes/lobby');
 var game = require('./routes/game');
 var messages = require('./routes/messages');
+var pg = require('pg');
+var db = require('./routes/db');
 
 
 var app = express();
@@ -43,6 +45,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({resave:true, saveUninitialized:true, secret: 'SECRET',cookie: { maxAge: 600000 }})); //todo check
 
+app.use('/db',db);
 app.use('/', index);
 app.use('/api/login', login);
 app.use('/api/auth', auth);

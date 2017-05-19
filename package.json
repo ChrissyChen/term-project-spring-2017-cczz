@@ -12,6 +12,7 @@
     "dbrestore": "psql -U postgres -f ./db/dumpydb.sql"
   },
   "dependencies": {
+    "pg": "6.x",
     "bluebird": "^3.5.0",
     "body-parser": "~1.17.1",
     "connect-flash": "^0.1.1",

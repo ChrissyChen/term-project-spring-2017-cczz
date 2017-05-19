@@ -12,12 +12,12 @@ var pgp = require('pg-promise')(options);
 var cn = {
     host: 'localhost',
     post: 5432,
-    database: 'postgres',
-    user: 'postgres',
+    database: 'postgres_cczz_test',
+    user: 'postgres_cczz_test',
     password: '123456'
 };
 
-var db = pgp(cn);
+var db = pgp(process.env.DATABASE_URL);
 
 module.exports = db;
 
